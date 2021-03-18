@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('content')
     <div class="row">
-        <div class="col-sm">
-            <div class="p-2 m-2">
+        <div class="container-fluid">
+            <div class="py-3 col-9 ">
                 <h5 class="font-weight-bold">Amr Task</h5>
                 <div class="alert alert-primary alert-dismissible fade show" role="alert">
                     <strong>Buka todo list!</strong> Tulis yang ingin di kerjakan , bukan yang akan dikerjakan
@@ -29,19 +29,20 @@
                     <tr>
                         <th>No</th>
                         <th>Kegiatan</th>
-                        <th>Dimulai</th>
+                        <th> <i class="fa fa-flag text-primary"></i> </th>
                         <th><i class="fa fa-check text-success"></i></th>
-                        <th> <i class="fa fa-edit"></i>  </th>
-                        <th> <i class="fa fa-trash text-danger"></i>  </th>
+                        {{-- <th><i class="fa fa-clock-o text-success"></i></th> --}}
+                        <th> <i class="fa fa-edit"></i> </th>
+                        <th> <i class="fa fa-trash text-danger"></i> </th>
                     </tr>
                     @foreach ($in_kegiatan as $kegiatan)
                         <tr>
                             <td width="1"> {{ $loop->iteration }} </td>
                             <td> {{ $kegiatan->kegiatan }} </td>
-                            <td width="150"> {{ $kegiatan->created_at->format('d-M-y h:i') }} </td>
+                            <td width="150"> {{ $kegiatan->created_at->format('d-M-y') }} </td>
                             <td width=150>
                                 @if ($kegiatan->selesai != null)
-                                    {{ date('d-M-y h:i', $kegiatan->selesai) }}
+                                    {{ date('d-M-y', $kegiatan->selesai) }}
                                 @else
 
                                     <form action=" {{ route('task.update', $kegiatan->kd_task_todo) }} " method="POST">
@@ -55,9 +56,25 @@
 
                                 @endif
                             </td>
+                            {{-- <td> --}}
+                                {{-- @if ($kegiatan->selesai != null)
+                                    @php
+                                        $datetime1 = new DateTime($kegiatan->created_at->format('d-M-y h:i'));
+                                        $datetime2 = new DateTime(date('Y-m-d h:i:s', $kegiatan->selesai));
+                                        $interval = $datetime1->diff($datetime2);
+                                        // %a hari
+                                        $elapsed = $interval->format(' %h j %i m');
+                                        echo $elapsed;
+                                    @endphp
+                                @else
+                                    <span class="spinner-spin text-primary"></span>
+
+                                @endif --}}
+                            {{-- </td> --}}
                             <td width="1">
-                                <button class="btn btn-secondary btn-sm"  data-toggle="modal" data-target="#modal{{$kegiatan->kd_task_todo}}">
-                                     <i class="fa fa-edit"></i>
+                                <button class="btn btn-secondary btn-sm" data-toggle="modal"
+                                    data-target="#modal{{ $kegiatan->kd_task_todo }}">
+                                    <i class="fa fa-edit"></i>
                                 </button>
                             </td>
                             <td width="1">
@@ -72,16 +89,17 @@
 
                         </tr>
 
-                        <div class="modal fade" tabindex="-1" id="modal{{$kegiatan->kd_task_todo}}">
+                        <div class="modal fade" tabindex="-1" id="modal{{ $kegiatan->kd_task_todo }}">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-body">
-                                        <form action=" {{route('task.update',$kegiatan->kd_task_todo)}} " method="POST">
+                                        <form action=" {{ route('task.update', $kegiatan->kd_task_todo) }} " method="POST">
                                             @csrf
-                                            {{method_field('PUT')}}
+                                            {{ method_field('PUT') }}
                                             <div class="form-group">
                                                 <label for="">Kegiatan</label>
-                                                <input type="text" class="form-control" name="ubah_kegiatan" value="{{$kegiatan->kegiatan}}">
+                                                <input type="text" class="form-control" name="ubah_kegiatan"
+                                                    value="{{ $kegiatan->kegiatan }}">
                                             </div>
                                             <button class="btn btn-primary  btn-block" type="submit">
                                                 Simpan
@@ -95,8 +113,8 @@
                 </table>
             </div>
         </div>
-        <div class="col-sm-4 center text-center bg-primary text-white ">
-            <div>
+        <div class="  offset-sm-9  fixed-top center text-center bg-primary text-white ">
+            <div class="">
                 <h1 class="font-weight-bold">
                     <i class="fa fa-calendar"></i>
                     {{ date('D m Y') }}
