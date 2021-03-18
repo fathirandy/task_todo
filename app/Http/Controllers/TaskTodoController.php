@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Model\taskTodo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use League\CommonMark\Extension\TaskList\TaskListItemMarkerParser;
 
 class TaskTodoController extends Controller
 {
@@ -21,7 +19,7 @@ class TaskTodoController extends Controller
      */
     public function index()
     {
-        $in_kegiatan=taskTodo::get();
+        $in_kegiatan=taskTodo::latest()->get();
         return view($this->taskFolder.'.index', compact('in_kegiatan') );
     }
 
